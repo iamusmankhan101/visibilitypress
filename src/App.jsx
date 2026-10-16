@@ -111,11 +111,10 @@ const FitIcon = ({ yes }) => (
   </svg>
 )
 
-// Privacy and Terms have no pages yet — point these at them once they exist
 const footerLinks = [
   ['Company', [['About us', '/about'], ['Why Visibility Press', '/#why'], ['What We Do', '/#services'], ['Testimonials', '/#testimonials'], ['Contact', '/contact']]],
   ['What We Do', services.map(([t]) => [t, serviceHref(t)])],
-  ['Legal', [['Privacy policy', '#'], ['Terms of service', '#']]],
+  ['Legal', [['Privacy policy', '/privacy'], ['Terms of service', '/terms']]],
 ]
 
 const svc = i => [services[i][0], serviceHref(services[i][0])]
@@ -557,17 +556,97 @@ function ContactPage() {
   )
 }
 
+// TEMPLATE legal copy — fill in the [bracketed] details and have a lawyer review both pages before launch.
+// Each section: [heading, ...items]; a string is a paragraph, an array is a bullet list.
+const legalUpdated = '16 October 2026'
+const legalPages = {
+  '/privacy': ['Privacy Policy', 'How we collect, use and protect your personal information.', [
+    ['Who we are', 'Visibility Press (“we”, “us”) is a PR and media agency operated by [legal company name], [registered address]. This policy explains what personal information we collect when you visit our website or contact us, how we use it and the choices you have.'],
+    ['What we collect',
+      'Information you give us. When you use our contact form or email us, we receive your name, email address, company or brand, website, the service you’re interested in and your message. If you become a client, we also receive what we need to do the work, such as your story, bio, photos, interview answers and billing details.',
+      'Information collected automatically. Our hosting provider keeps standard server logs, including your IP address, browser type, the pages you request and when. We don’t use analytics or advertising cookies on this website.',
+      'Third-party content. Our fonts are loaded from Google Fonts and some images from Unsplash. Loading them sends your IP address and browser details to those providers, who handle it under their own privacy policies.'],
+    ['How we use it', [
+      'To reply to your enquiry and prepare a proposal',
+      'To deliver our services, including pitching your approved story to publications',
+      'To send invoices and keep financial records',
+      'To keep our website secure and working',
+      'To meet our legal obligations',
+    ], 'We don’t sell your personal information, and we won’t send you marketing without your permission.'],
+    ['Our legal basis', 'Where data protection law requires a legal basis, we rely on taking steps before or performing a contract with you, our legitimate interest in running our business and answering enquiries, complying with the law, and your consent where we ask for it.'],
+    ['Who we share it with', [
+      'Service providers who help us run the business, such as email, hosting, form handling and accounting, under contract and only for that purpose',
+      'Publications, editors and journalists, but only the material you have approved for publication',
+      'Professional advisers, such as lawyers and accountants',
+      'Authorities, when the law requires it',
+    ]],
+    ['International transfers', 'Some of our providers process data outside your country. When that happens, we use appropriate safeguards, such as standard contractual clauses.'],
+    ['How long we keep it', 'We keep enquiries that don’t lead to work for up to [24 months]. We keep client records for as long as we work together and afterwards for as long as tax, accounting or legal rules require.'],
+    ['Your rights', 'Depending on where you live, you can ask to see, correct or delete your personal information, object to or restrict how we use it, receive a copy of it, or withdraw consent you have given. Email hello@visibilitypress.com and we’ll reply within one month. You can also complain to your local data protection authority.'],
+    ['Security', 'We use reasonable technical and organisational measures to protect your information. No method of sending or storing data is completely secure, so we can’t guarantee absolute security.'],
+    ['Children', 'Our website and services are for businesses and adults. We don’t knowingly collect information from anyone under 18.'],
+    ['Changes to this policy', 'We may update this policy. The date at the top shows when it last changed.'],
+    ['Contact us', 'Questions about your privacy? Email hello@visibilitypress.com.'],
+  ]],
+  '/terms': ['Terms of Service', 'The terms that apply when you use our website or work with us.', [
+    ['About these terms', 'These terms apply to your use of the Visibility Press website and to the services we provide. Visibility Press is operated by [legal company name], [registered address]. By using our website or services, you agree to these terms. If you’re a client, your proposal or agreement also applies, and where it conflicts with these terms, the proposal or agreement wins.'],
+    ['Our services', 'We provide PR, media placement, thought leadership, content, reputation, website and AI visibility services. The scope, target outlets, deliverables, timelines and fees for your work are set out in your proposal.'],
+    ['No guaranteed outcomes', 'Publications make their own editorial decisions. We place both earned and sponsored coverage and tell you which is which. We don’t guarantee specific business results, such as sales, search rankings or how AI tools describe you. If a booked outlet doesn’t publish, we replace it with an equivalent outlet or refund that placement.'],
+    ['Your responsibilities', [
+      'Give us accurate information about you and your business',
+      'Only send us material you have the right to use, such as photos, logos and quotes',
+      'Make sure the claims in your story are true and lawful',
+      'Review and approve drafts within a reasonable time',
+    ]],
+    ['Approvals and published content', 'You approve every piece before we submit it. Once an article is published, the outlet controls it, and any later edits or removal are at the outlet’s discretion.'],
+    ['Fees and payment', 'Fees are set out in your proposal. Unless your proposal says otherwise, payment is due [before work starts]. Prices exclude any applicable taxes.'],
+    ['Cancellations and refunds', 'You can cancel as set out in your proposal. Work already completed and placements already published are not refundable, except as described under “No guaranteed outcomes”.'],
+    ['Intellectual property', 'The content of this website belongs to us. Once you have paid in full, you may use the content we create for you for your own business. Publications may own the rights to the articles they publish, so check their terms before republishing an article in full.'],
+    ['Using our website', 'Please don’t misuse our website, for example by trying to break its security or copying its content for commercial use. The information on the website is general and isn’t professional advice. We aren’t responsible for the content of third-party websites we link to.'],
+    ['Liability', 'To the extent the law allows, we aren’t liable for indirect or consequential losses, such as lost profits or lost opportunities, and our total liability to you is limited to the fees you paid us in the 12 months before the claim. Nothing in these terms limits liability that can’t be limited by law.'],
+    ['Changes to these terms', 'We may update these terms. The date at the top shows when they last changed. The version in place when you signed your proposal applies to that work.'],
+    ['Governing law', 'These terms are governed by the laws of [jurisdiction], and the courts of [jurisdiction] deal with any disputes.'],
+    ['Contact us', 'Questions about these terms? Email hello@visibilitypress.com.'],
+  ]],
+}
+
+function LegalPage({ page: [title, intro, sections] }) {
+  return (
+    <>
+      <section className="svc-hero" style={{ '--img': 'none' }}>
+        <div className="wrap">
+          <nav className="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span>{title}</span></nav>
+          <h1>{title}</h1>
+          <p>{intro}</p>
+        </div>
+      </section>
+      <article className="wrap legal">
+        <p className="legal-updated">Last updated {legalUpdated}</p>
+        {sections.map(([heading, ...items]) => (
+          <div key={heading}>
+            <h2>{heading}</h2>
+            {items.map((item, i) => Array.isArray(item)
+              ? <ul key={i}>{item.map(li => <li key={li}>{li}</li>)}</ul>
+              : <p key={i}>{item}</p>)}
+          </div>
+        ))}
+      </article>
+    </>
+  )
+}
+
 const homeTitle = 'VisibilityPress — Get Featured in Top Publications'
 
 export default function App() {
   const path = window.location.pathname.replace(/\/$/, '')
   const isContact = path === '/contact'
   const isAbout = path === '/about'
+  const legal = legalPages[path]
   const match = path.match(/^\/services\/([^/]+)$/)
   const service = match && services.find(([t]) => slug(t) === match[1])
   useEffect(() => {
-    document.title = isContact ? 'Contact — Visibility Press' : isAbout ? 'About — Visibility Press' : service ? `${service[0]} — Visibility Press` : homeTitle
-  }, [isContact, isAbout, service])
+    document.title = isContact ? 'Contact — Visibility Press' : isAbout ? 'About — Visibility Press' : legal ? `${legal[0]} — Visibility Press` : service ? `${service[0]} — Visibility Press` : homeTitle
+  }, [isContact, isAbout, legal, service])
   const [menuOpen, setMenuOpen] = useState(false)
   const current = href => (href === path ? 'page' : undefined)
 
@@ -616,7 +695,7 @@ export default function App() {
       </header>
 
       <main>
-        {isContact ? <ContactPage /> : isAbout ? <AboutPage /> : service ? <ServicePage service={service} /> : <Home />}
+        {isContact ? <ContactPage /> : isAbout ? <AboutPage /> : legal ? <LegalPage page={legal} /> : service ? <ServicePage service={service} /> : <Home />}
 
         {!isContact && (
           <section className="final">
