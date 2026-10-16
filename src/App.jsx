@@ -113,8 +113,8 @@ const FitIcon = ({ yes }) => (
 
 // Privacy and Terms have no pages yet — point these at them once they exist
 const footerLinks = [
-  ['Company', [['About us', '/about'], ['Why Visibility Press', '/#why'], ['Services', '/#services'], ['Testimonials', '/#testimonials'], ['Contact', '/contact']]],
-  ['Services', services.map(([t]) => [t, serviceHref(t)])],
+  ['Company', [['About us', '/about'], ['Why Visibility Press', '/#why'], ['What We Do', '/#services'], ['Testimonials', '/#testimonials'], ['Contact', '/contact']]],
+  ['What We Do', services.map(([t]) => [t, serviceHref(t)])],
   ['Legal', [['Privacy policy', '#'], ['Terms of service', '#']]],
 ]
 
@@ -123,6 +123,18 @@ const megaColumns = [
   ['PR & Media', [0, 1, 2, 5].map(svc)],
   ['Digital & AI', [3, 4, 7, 6].map(svc)],
   ['Get Started', [['About us', '/about'], ['Why Visibility Press', '/#why'], ['Client stories', '/#testimonials'], ['Book a strategy call', '/contact']]],
+]
+
+// Sector pages don't exist yet — each sector links to the contact page until they do
+const sectors = [
+  ['Consumer', ['Food & Drink', 'Retail & FMCG', 'Health & Beauty', 'Luxury & Travel', 'Hospitality & Leisure']],
+  ['B2B & Professional', ['B2B PR', 'Technology', 'Property & Construction', 'Corporate']],
+]
+
+// header dropdowns: [label, href, intro, [button label, href], columns]
+const menus = [
+  ['What We Do', '/#services', 'Visibility Press turns your story into coverage people trust, then makes that credibility work across sales, search and AI.', ['How We Work', '/about'], megaColumns],
+  ['Who We Work With', '/about', 'From consumer brands to B2B and professional firms, we know the outlets your customers actually read.', ['Talk to Us', '/contact'], sectors.map(([title, items]) => [title, items.map(t => [t, '/contact'])])],
 ]
 
 const Cta = ({ children = 'Book a strategy call' }) => <a className="btn" href="/contact">{children}</a>
@@ -199,7 +211,7 @@ function ServicePage({ service }) {
     <>
       <section className="svc-hero" style={{ '--img': `url(${img})` }}>
         <div className="wrap">
-          <nav className="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a> / <span>{title}</span></nav>
+          <nav className="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">What We Do</a> / <span>{title}</span></nav>
           <span className="svc-hero-icon"><Icon d={icon} /></span>
           <h1>{title}</h1>
           <p>{summary}</p>
@@ -356,7 +368,7 @@ function Home() {
     <>
       <section className="hero">
         <div className="hero-inner">
-          <h1>Get Your Story Published In <span className="nowrap">Top-Tier</span> Media – Guaranteed</h1>
+          <h1>Get Your Brand Published In <span className="nowrap">Top-Tier</span> Media</h1>
           <p className="hero-desc">Let trusted headlines do the convincing, so clients, investors and partners already believe in you before you say a word. Book a free call today and start turning credibility into growth.</p>
           <a className="btn-pill" href="/contact">Get Featured <span aria-hidden="true">→</span></a>
         </div>
@@ -372,7 +384,7 @@ function Home() {
 
       <section id="services" className="services">
         <div className="wrap">
-          <p className="eyebrow">Our services</p>
+          <p className="eyebrow">What we do</p>
           <h2>Everything You Need To Be Seen And Trusted</h2>
           <p className="services-intro">From the story you tell to where it gets published and how AI repeats it, we cover every part of your visibility.</p>
           <div className="services-grid">
@@ -565,24 +577,26 @@ export default function App() {
         <a className="logo" href="/"><img src="/visibilty-press-brand-logo-tertiary.png" alt="Visibility Press" /></a>
         <nav className="nav-links" aria-label="Main">
           <a href="/about" aria-current={current('/about')}>About</a>
-          {/* opens on hover or keyboard focus (CSS :focus-within); the link itself still goes to the services section */}
-          <div className="dropdown">
-            <a href="/#services" aria-haspopup="true" className={service ? 'is-active' : undefined}>Services <Icon d="M6 9l6 6 6-6" width={2} /></a>
-            <div className="mega">
-              <div className="mega-inner">
-                <div className="mega-intro">
-                  <p>Visibility Press turns your story into coverage people trust, then makes that credibility work across sales, search and AI.</p>
-                  <a className="mega-btn" href="/about">How We Work <Icon d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM9 15l6-6M10 9h5v5" /></a>
-                </div>
-                {megaColumns.map(([title, links]) => (
-                  <div key={title} className="mega-col">
-                    <h4>{title}</h4>
-                    <ul>{links.map(([label, href]) => <li key={label}><a href={href}>{label}</a></li>)}</ul>
+          {/* opens on hover or keyboard focus (CSS :focus-within); the link itself still goes to its href */}
+          {menus.map(([label, href, intro, [btn, btnHref], columns]) => (
+            <div key={label} className="dropdown">
+              <a href={href} aria-haspopup="true" className={label === 'What We Do' && service ? 'is-active' : undefined}>{label} <Icon d="M6 9l6 6 6-6" width={2} /></a>
+              <div className="mega">
+                <div className="mega-inner">
+                  <div className="mega-intro">
+                    <p>{intro}</p>
+                    <a className="mega-btn" href={btnHref}>{btn} <Icon d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM9 15l6-6M10 9h5v5" /></a>
                   </div>
-                ))}
+                  {columns.map(([title, links]) => (
+                    <div key={title} className="mega-col">
+                      <h4>{title}</h4>
+                      <ul>{links.map(([label, href]) => <li key={label}><a href={href}>{label}</a></li>)}</ul>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          ))}
           <a href="/contact" aria-current={current('/contact')}>Contact</a>
         </nav>
         <a className="nav-cta" href="/contact">Get featured <span aria-hidden="true">→</span></a>
@@ -592,8 +606,10 @@ export default function App() {
         {/* phones only: the desktop links are hidden below 720px */}
         <nav id="mobile-menu" className="mobile-menu" hidden={!menuOpen} aria-label="Mobile">
           <a href="/about">About</a>
-          <p>Services</p>
+          <p>What We Do</p>
           {services.map(([t]) => <a key={t} className="mobile-sub" href={serviceHref(t)}>{t}</a>)}
+          <p>Who We Work With</p>
+          {sectors.flatMap(([, items]) => items).map(t => <a key={t} className="mobile-sub" href="/contact">{t}</a>)}
           <a href="/contact">Contact</a>
           <a className="btn-pill nav-cta-mobile" href="/contact">Get Featured <span aria-hidden="true">→</span></a>
         </nav>
